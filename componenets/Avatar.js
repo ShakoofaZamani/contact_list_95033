@@ -31,6 +31,3 @@ const styles  = StyleSheet.create({
     }
 
 })
-
-
-
