@@ -3,12 +3,15 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { concat } from 'react-native-reanimated';
 import Profile from './screens/profile'
+import CreateContact from './screens/CreateContact'
+import SearchScreen from './screens/SearchScreen'
+
 
 export default function App() {
   return (
     <View style={styles.container}>
       
-      <Profile name="Shakoofa" phone="0730964534" email="Shakoofazamani786@gmail.com" />
+      <SearchScreen/>
     </View>
   );
 }
@@ -16,6 +19,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'#f8f4f4'
     
   },
 });
