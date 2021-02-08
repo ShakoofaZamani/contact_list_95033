@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React,{useEffect} from 'react';
+
 import {MaterialIcons} from '@expo/vector-icons';
 import { StyleSheet, Text, Touchable,TouchableOpacity, View } from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import { concat } from 'react-native-reanimated';
+import * as SQLite from 'expo-sqlite';
 const Stack = createStackNavigator();
+const db = SQLite.openDatabase('contacts.db');
 
 
 import Contacts from './screens/contacts'
@@ -15,7 +18,13 @@ import SearchScreen from './screens/SearchScreen'
 
 
 
+
 export default function App() {
+  useEffect(()=>{
+    db.transaction(tx =>{
+       tx.executeSql('create table if not exists contact(id integer primary key autoincrement, name text, phone text, email text);', [],()=>console.log('table created successful'));
+    })
+  })
   return (
       <NavigationContainer>
          <Stack.Navigator> 
