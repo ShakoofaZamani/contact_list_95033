@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import {
     View,
     Text,
@@ -7,36 +7,47 @@ import {
     TouchableOpacity,
 
 } from 'react-native'
+import * as SQLite from 'expo-sqlite';
 import {Feather} from '@expo/vector-icons'
 import { color } from 'react-native-reanimated';
 import colors from '../utils/colors'
 import ContactListItem from '../componenets/ContactListItem'
 
-const contacts = [
-    { id: '1', name: 'Shakoofa', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '2', name: 'Aqideh', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '3', name: 'Wajiha', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '4', name: 'Sodabeh', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '5', name: 'Fatemah', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '6', name: 'Sayea', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '7', name: 'Nasrin', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '8', name: 'Sima', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '10', name: 'Shakoofa', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '11', name: 'Sima', phone: '0730334455', email: 'shakoofazamani786@gmail.com '},
-    { id: '12', name: 'Shakoofa', phone: '0730334455', email: 'shakoofazamani786@gmail.com '}
-]
+const db = SQLite.openDatabase('contacts.db');
+
 
 export default function Contacts({navigation}){
+    const [contacts, setContacts] = useState([]);
+    
+    useEffect(()=>{
+        db.transaction((tx) => {
+            tx.executeSql('select * from contact', [],(tx,{rows})=>{
+              var data = [];
+              for(var i = 0; i< rows.length; i++){
+                  data.push(rows[i]);
+              }
+              setContacts(data);
+            })
+        })
+    })
+    const deleteContact = (id) =>{
+        db.transaction(tx =>{
+            tx.executeSql('delete from contact where id = ?', [id]);
+        })
+    }
    return(
        <View>
-    <FlatList
+           {contacts.length > 0 ? <FlatList
     data={contacts}
     keyExtractor={(item)=>item.id}
     renderItem={({item}) => {
     
-     return <ContactListItem name={item.name} phone={item.phone} onPress={()=>navigation.navigate('Profile',{item:item})} />
+     return <ContactListItem name={item.name} phone={item.phone} onPress={()=>navigation.navigate('Profile',{item:item})} onDeleteContact={()=> deleteContact(item.id)} />
 }}
-/>
+
+/>: <View>
+    <Text>No contact to display</Text>
+    </View>}
  <TouchableOpacity style={styles.floatButton} onPress={()=>navigation.navigate('CreateContact')}>
     <Text>
         <Feather name="plus" size={28} color="white" />

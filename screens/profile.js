@@ -10,7 +10,7 @@ import { color } from 'react-native-reanimated';
 import colors from '../utils/colors'
 import ContactThumnail from '../componenets/contactThumnail';
 import DetailListItem from '../componenets/DetailsListItem'
-export default function CProfile(props){
+export default function Profile(props){
     const {route} = props;
     const {item} = route.params
     const {name,phone,email} = item
