@@ -3,12 +3,9 @@ import {
     View,
     Text,
     TextInput,
-    TouchableOpacity,
     StyleSheet
 
 } from 'react-native'
-
-import colors from '../utils/colors'
 
 export default function SearchScreen(){
      return(
